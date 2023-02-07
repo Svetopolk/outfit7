@@ -2,6 +2,7 @@ package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.domain.User;
 import com.svetopolk.demo.repository.UserRepository;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 public class UserService {
 
+    @Getter //TODO
     private final long limit;
     private final UserRepository userRepository;
 

@@ -21,9 +21,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.0.2'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket:3.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.0.2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.26'
     testCompileOnly 'org.projectlombok:lombok:1.18.26'

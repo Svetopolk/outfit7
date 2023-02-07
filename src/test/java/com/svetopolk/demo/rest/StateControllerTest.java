@@ -3,7 +3,6 @@ package com.svetopolk.demo.rest;
 import com.svetopolk.demo.dto.Status;
 import com.svetopolk.demo.dto.StateResponse;
 import com.svetopolk.demo.service.StateService;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -35,8 +34,7 @@ class StateControllerTest {
     private StateService stateService;
 
     @Test
-    @SneakyThrows
-    void getStateSuccess() {
+    void getStateSuccess() throws Exception {
         var response2 = new StateResponse(Status.of(true), Status.of(true), Status.of(true));
         Mockito.when(stateService.getState(any(), any(), any())).thenReturn(response2);
 
@@ -60,8 +58,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateBadTimezone() {
+    void getStateBadTimezone() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,8 +79,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateMissedUserId() {
+    void getStateMissedUserId() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,8 +99,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateMissedCC() {
+    void getStateMissedCountryCode() throws Exception {
         var response2 = new StateResponse(Status.of(true), Status.of(true), Status.of(true));
         Mockito.when(stateService.getState(any(), any(), any())).thenReturn(response2);
 
@@ -128,8 +123,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateEmptyRequest() {
+    void getStateEmptyRequest() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,8 +138,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateNotJson() {
+    void getStateNotJson() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,8 +153,7 @@ class StateControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getStateNoMediaType() {
+    void getStateNoMediaType() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/services/status")
                 .content("not json");

@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -15,24 +14,17 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @Component
-@Order(1)
 @Slf4j
 public class LogFilter extends OncePerRequestFilter {
 
-    private final static int maxPayloadLength = 1000;
-
-    private String getContentAsString(byte[] buf, String charsetName) {
-        if (buf == null || buf.length == 0) return "";
-        int length = Math.min(buf.length, maxPayloadLength);
-        try {
-            return new String(buf, 0, length, charsetName);
-        } catch (UnsupportedEncodingException ex) {
-            return "Unsupported Encoding";
-        }
-    }
+    private final static int BODY_LOG_LIMIT = 1000;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         long startTime = System.currentTimeMillis();
         StringBuilder reqInfo = new StringBuilder()
@@ -54,7 +46,7 @@ public class LogFilter extends OncePerRequestFilter {
 
         long duration = System.currentTimeMillis() - startTime;
 
-        //log the request's body AFTER the request has been made
+        //refactor: bad idea to log request after it's execution, but ContentCachingResponseWrapper does not allow to do it earlier
         String requestBody = this.getContentAsString(wrappedRequest.getContentAsByteArray(), request.getCharacterEncoding());
         if (requestBody.length() > 0) {
             log.info("IN body:" + requestBody);
@@ -64,5 +56,15 @@ public class LogFilter extends OncePerRequestFilter {
         log.info("OUT body:" + getContentAsString(wrappedResponse.getContentAsByteArray(), response.getCharacterEncoding()));
 
         wrappedResponse.copyBodyToResponse();
+    }
+
+    private String getContentAsString(byte[] buf, String charsetName) {
+        if (buf == null || buf.length == 0) return "";
+        int length = Math.min(buf.length, BODY_LOG_LIMIT);
+        try {
+            return new String(buf, 0, length, charsetName);
+        } catch (UnsupportedEncodingException ex) {
+            return "Unsupported Encoding";
+        }
     }
 }

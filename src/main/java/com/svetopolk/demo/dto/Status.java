@@ -6,7 +6,9 @@ public enum Status {
     @JsonProperty("enabled")
     ENABLED,
     @JsonProperty("disabled")
-    DISABLED;
+    DISABLED,
+    @JsonProperty("undefined")
+    UNDEFINED;
 
     public static Status of(boolean value) {
         if (value) {
