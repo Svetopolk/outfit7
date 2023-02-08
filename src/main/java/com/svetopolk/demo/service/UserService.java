@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Getter //TODO
     private final long limit;
     private final UserRepository userRepository;
 

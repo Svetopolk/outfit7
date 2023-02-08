@@ -24,7 +24,7 @@ class UserServiceTest {
         var name = "Petr";
         var user = userService.createUser(userId, name);
 
-        assertThat(user, is(new User(userId,name)));
+        assertThat(user, is(new User(userId, name, 0)));
     }
 
 

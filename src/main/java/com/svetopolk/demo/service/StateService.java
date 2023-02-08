@@ -13,14 +13,18 @@ import java.util.TimeZone;
 @RequiredArgsConstructor
 public class StateService {
 
+    AdsService adsService;
+    SupportService supportService;
+    UserService userService;
+
     public StateResponse getState(String userId, TimeZone timezone, String countryCode) {
         log.info("getState({}, {}, {})", userId, timezone.getID(), countryCode);
 
-        Status multiplayerStatus = Status.of(true);
-        Status userSupportStatus = Status.of(true);
-        Status adsStatus = Status.of(true);
+        var user = userService.getUser(userId);
+        Status multiplayerStatus = Status.of(user.skill() >= 5);
+        Status userSupportStatus = supportService.getStatus();
+        Status adsStatus = adsService.execute(countryCode);
 
         return new StateResponse(multiplayerStatus, userSupportStatus, adsStatus);
     }
-
 }

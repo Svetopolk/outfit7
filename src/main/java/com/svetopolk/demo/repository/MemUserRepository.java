@@ -16,7 +16,7 @@ import java.util.Map;
 @Repository
 public class MemUserRepository implements UserRepository {
 
-    private final long limit ;
+    private final long limit;
     private final Map<String, User> users = new HashMap<>();
 
     public MemUserRepository(@Value("${users.list.limit}") long limit) {
@@ -25,7 +25,7 @@ public class MemUserRepository implements UserRepository {
 
     @Override
     public User create(String id, String name) {
-        var user = new User(id, name);
+        var user = new User(id, name, 0);
         users.put(id, user);
         return user;
     }
