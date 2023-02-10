@@ -1,4 +1,4 @@
-package com.svetopolk.demo.dto;
+package com.svetopolk.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

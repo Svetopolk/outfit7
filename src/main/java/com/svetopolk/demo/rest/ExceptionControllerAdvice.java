@@ -49,5 +49,4 @@ class ExceptionControllerAdvice {
         log.error(ex.getLocalizedMessage());
         return Map.of("user", "user not found");
     }
-
 }

@@ -1,6 +1,6 @@
 package com.svetopolk.demo.service;
 
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -127,5 +127,4 @@ class AdsServiceTest {
 
         assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
-
 }

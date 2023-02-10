@@ -1,6 +1,6 @@
 package com.svetopolk.demo.rest;
 
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import com.svetopolk.demo.dto.StateResponse;
 import com.svetopolk.demo.service.StateService;
 import org.junit.jupiter.api.Test;

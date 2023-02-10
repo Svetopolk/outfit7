@@ -2,7 +2,7 @@ package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.domain.User;
 import com.svetopolk.demo.dto.StateResponse;
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import com.svetopolk.demo.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ class StateServiceTest {
     void getStateLowSkill() {
         when(adsService.getStatus(countryCode)).thenReturn(Status.DISABLED);
         when(supportService.getStatus()).thenReturn(Status.DISABLED);
-        when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 4));
+        when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 5));
 
         var userState = stateService.getState(userId, timeZone, countryCode);
 
@@ -58,13 +58,12 @@ class StateServiceTest {
     void getStateHighSkill() {
         when(adsService.getStatus(countryCode)).thenReturn(Status.ENABLED);
         when(supportService.getStatus()).thenReturn(Status.ENABLED);
-        when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 5));
+        when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 6));
 
         var userState = stateService.getState(userId, timeZone, countryCode);
 
         assertThat(userState, is(new StateResponse(Status.ENABLED, Status.ENABLED, Status.ENABLED)));
     }
-
 
     @Test
     void getStateUserNotFound() {
@@ -74,7 +73,7 @@ class StateServiceTest {
 
         var userState = stateService.getState(userId, timeZone, countryCode);
 
-        assertThat(userState, is(new StateResponse(Status.DISABLED, Status.DISABLED, Status.DISABLED)));
+        assertThat(userState, is(new StateResponse(Status.UNDEFINED, Status.DISABLED, Status.DISABLED)));
     }
 
 }

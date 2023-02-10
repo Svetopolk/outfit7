@@ -23,10 +23,12 @@ curl -X POST http://localhost:8080/services/status  -H "Content-Type: applicatio
 Possible response: \
 {"multiplayer":"disabled","user-support":"enabled","ads":"undefined"}
 
-Comments:
-- if user not found services api return http 200 but multiplayer is disabled
-- if user not found services admit return http 400
-- timezone filed in status request is useless but anyway required and validated
+##Comments
 - services api request is POST (not GET) because it is not idempotent. It changes server state and after 5 retries return another result.
-- 'undefined' status looks useful, it helps to separate the cases of refuse and tech failure
+- 'undefined' status in response looks useful, it helps to separate the cases of refuse and tech failure
+- if user not found services api return http 200 with 'undefined' multiplayer status 
+- if user not found services admit return http 400
+- 'timezone' filed in status request is useless but anyway required and validated
+- delete method returns http code 200 (deleted) and 204 (nothing to delete) 
+
 

@@ -1,8 +1,6 @@
 package com.svetopolk.demo.rest;
 
 import com.svetopolk.demo.domain.User;
-import com.svetopolk.demo.dto.StateResponse;
-import com.svetopolk.demo.dto.Status;
 import com.svetopolk.demo.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
@@ -84,6 +81,4 @@ class UserControllerTest {
                          """));
 
     }
-
-
 }

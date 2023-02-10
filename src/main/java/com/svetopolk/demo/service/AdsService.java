@@ -2,11 +2,10 @@ package com.svetopolk.demo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -47,12 +46,6 @@ public class AdsService {
             return new AdsResponse("undefined");
         }
     }
-
-    private static void logErrorResponse(ClientResponse response) {
-        log.error("status: {}", response.statusCode());
-        response.bodyToMono(String.class).subscribe(body -> log.error("body: {}", body));
-    }
-
     record AdsResponse(String ads) {
     }
 }

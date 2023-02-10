@@ -1,6 +1,6 @@
 package com.svetopolk.demo.service;
 
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import com.svetopolk.demo.validator.TimeZoneValidator;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +39,14 @@ public class SupportService {
     }
 
     @NonNull
-    private String validateTime(String time) {
+    private static String validateTime(String time) {
         if (!time.contains(":")) {
             throw new IllegalArgumentException("wrong time format: " + time);
         }
         return time;
     }
 
-    private List<String> validateHolidays(List<String> holidays) {
+    private static List<String> validateHolidays(List<String> holidays) {
         var validMonths = Set.of("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
         holidays.forEach(x -> {
                     if (x.length() < 5) {
@@ -87,13 +87,10 @@ public class SupportService {
 
     public static boolean isWeekend(ZonedDateTime date) {
         int dayOfWeek = date.getDayOfWeek().getValue();
-        System.out.println(dayOfWeek);
         return dayOfWeek == 6 || dayOfWeek == 7;
     }
 
     private boolean isHoliday(ZonedDateTime time) {
-        System.out.println(holidays);
-        System.out.println(formatDate(time));
         return holidays.contains(formatDate(time));
     }
 

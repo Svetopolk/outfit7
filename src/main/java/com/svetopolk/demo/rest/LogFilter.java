@@ -6,12 +6,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
+import static org.springframework.util.Assert.notEmpty;
 
 @Component
 @Slf4j
@@ -53,7 +56,10 @@ public class LogFilter extends OncePerRequestFilter {
         }
 
         log.info("OUT " + reqInfo + ": status=" + response.getStatus() + " duration(ms)=" + duration);
-        log.info("OUT body:" + getContentAsString(wrappedResponse.getContentAsByteArray(), response.getCharacterEncoding()));
+        String content = getContentAsString(wrappedResponse.getContentAsByteArray(), response.getCharacterEncoding());
+        if (StringUtils.hasText(content)) {
+            log.info("OUT body:" + content, response.getCharacterEncoding());
+        }
 
         wrappedResponse.copyBodyToResponse();
     }

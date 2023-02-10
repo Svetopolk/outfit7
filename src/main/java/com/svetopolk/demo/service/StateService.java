@@ -1,7 +1,7 @@
 package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.domain.User;
-import com.svetopolk.demo.dto.Status;
+import com.svetopolk.demo.domain.Status;
 import com.svetopolk.demo.dto.StateResponse;
 import com.svetopolk.demo.exception.UserNotFoundException;
 import lombok.NonNull;
@@ -33,17 +33,15 @@ public class StateService {
     }
 
     public StateResponse getState(@NonNull String userId, @NonNull TimeZone timezone, @NonNull String countryCode) {
-        log.info("getState({}, {}, {})", userId, timezone.getID(), countryCode);
 
-        User user;
+        Status multiplayerStatus;
         try {
-            user = userService.increaseSkill(userId);
+            User user = userService.increaseSkill(userId);
+            multiplayerStatus = Status.of(user.getSkill() > advancedThreshold);
         } catch (UserNotFoundException e) {
-            log.error("user " + userId + " not found, use default user instead");
-            user = User.defaultUser(userId);
+            log.error("user not found=" + userId);
+            multiplayerStatus = Status.UNDEFINED;
         }
-
-        Status multiplayerStatus = Status.of(user.getSkill() >= advancedThreshold);
         Status userSupportStatus = supportService.getStatus();
         Status adsStatus = adsService.getStatus(countryCode);
 
