@@ -43,7 +43,7 @@ class ExceptionControllerAdvice {
         return Map.of("unexpected", "we are really sorry");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public Map<String, String> handleHttpMessageNotReadableExceptions(UserNotFoundException ex) {
         log.error(ex.getLocalizedMessage());

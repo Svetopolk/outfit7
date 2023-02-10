@@ -1,6 +1,7 @@
 package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.domain.User;
+import com.svetopolk.demo.exception.UserNotFoundException;
 import com.svetopolk.demo.repository.MemUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 
 class UserServiceTest {
 
@@ -25,14 +27,14 @@ class UserServiceTest {
     @Test
     void createUser() {
         var userId = UUID.randomUUID().toString();
-        var name = "Petr";
+        var name = "Jure";
         var user = userService.createUser(userId, name);
         assertThat(user, is(new User(userId, name, 0)));
     }
 
     @Test
     void increaseUserSkill() {
-        var user = userService.createUser("Petr");
+        var user = userService.createUser("Jure");
         assertThat(user.getSkill(), is(0));
         user = userService.increaseSkill(user);
         assertThat(user.getSkill(), is(1));
@@ -40,7 +42,7 @@ class UserServiceTest {
 
     @Test
     void getUsers() {
-        var user1 = userService.createUser("Petr");
+        var user1 = userService.createUser("Jure");
         var user2 = userService.createUser("Maria");
 
         var users = userService.getUsers();
@@ -51,23 +53,40 @@ class UserServiceTest {
 
     @Test
     void checkGetUsersLimit() {
-        IntStream.range(0, 10).forEach(x -> userService.createUser("Petr"));
+        IntStream.range(0, 10).forEach(x -> userService.createUser("Jure"));
         var users = userService.getUsers();
         assertThat(users, hasSize(3));
     }
 
     @Test
     void deleteUser() {
-        var user = userService.createUser("Petr");
+        var user = userService.createUser("Jure");
         assertThat(userService.getUsers(), hasSize(1));
         userService.deleteUser(user.getId());
         assertThat(userService.getUsers(), hasSize(0));
     }
 
     @Test
+    void getUser() {
+        var userId = UUID.randomUUID().toString();
+        var name = "Jure";
+        userService.createUser(userId, name);
+        var user = userService.getUser(userId);
+        assertThat(user, is(new User(userId, name, 0)));
+    }
+
+    @Test
+    void getUserNotFound() {
+        var userId = UUID.randomUUID().toString();
+        var name = "Jure";
+        var e = assertThrows(UserNotFoundException.class, () -> userService.getUser("1234"));
+        assertThat(e.getLocalizedMessage(), is("user not found=1234"));
+    }
+
+    @Test
     void concurrentAccess() {
         userService = new UserService(2000, new MemUserRepository(2000));
-        IntStream.range(0, 1000).parallel().forEach(x -> userService.createUser("Petr"));
+        IntStream.range(0, 1000).parallel().forEach(x -> userService.createUser("Jure"));
         var users = userService.getUsers();
         assertThat(users, hasSize(1000));
 

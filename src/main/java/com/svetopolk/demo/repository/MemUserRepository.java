@@ -1,6 +1,7 @@
 package com.svetopolk.demo.repository;
 
 import com.svetopolk.demo.domain.User;
+import com.svetopolk.demo.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,11 @@ public class MemUserRepository implements UserRepository {
 
     @Override
     public User get(String id) {
-        return userMap.get(id);
+        var user = userMap.get(id);
+        if (user == null) {
+            throw new UserNotFoundException("user not found=" + id);
+        }
+        return user;
     }
 
     @Override
