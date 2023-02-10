@@ -39,7 +39,7 @@ class StateControllerTest {
         Mockito.when(stateService.getState(any(), any(), any())).thenReturn(response2);
 
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -60,7 +60,7 @@ class StateControllerTest {
     @Test
     void getStateBadTimezone() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -81,7 +81,7 @@ class StateControllerTest {
     @Test
     void getStateMissedUserId() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -104,7 +104,7 @@ class StateControllerTest {
         Mockito.when(stateService.getState(any(), any(), any())).thenReturn(response2);
 
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -125,7 +125,7 @@ class StateControllerTest {
     @Test
     void getStateEmptyRequest() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}");
 
@@ -140,7 +140,7 @@ class StateControllerTest {
     @Test
     void getStateNotJson() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("not json");
 
@@ -155,11 +155,10 @@ class StateControllerTest {
     @Test
     void getStateNoMediaType() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/services/status")
+                .post("/admin/services/status")
                 .content("not json");
 
         mockMvc.perform(request)
                 .andExpect(status().isUnsupportedMediaType());
     }
-
 }

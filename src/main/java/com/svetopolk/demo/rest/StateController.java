@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("services")
+@RequestMapping("admin/services")
 public class StateController {
 
     private final StateService stateService;
