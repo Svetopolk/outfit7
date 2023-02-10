@@ -7,17 +7,18 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * not thread safe
- * for test purpose only
+ * assumed for test purpose
  */
 
 @Repository
 public class MemUserRepository implements UserRepository {
 
     private final long limit;
-    private final Map<String, User> users = new HashMap<>();
+    private final Map<String, User> userMap = new HashMap<>();
+    private final ReentrantLock lock = new ReentrantLock();
 
     public MemUserRepository(@Value("${users.list.limit}") long limit) {
         this.limit = limit;
@@ -26,22 +27,42 @@ public class MemUserRepository implements UserRepository {
     @Override
     public User create(String id, String name) {
         var user = new User(id, name, 0);
-        users.put(id, user);
+        lock.lock();
+        userMap.put(id, user);
+        lock.unlock();
+        return user;
+    }
+
+    @Override
+    public User save(User user) {
         return user;
     }
 
     @Override
     public User get(String id) {
-        return users.get(id);
+        lock.lock();
+        var user = userMap.get(id);
+        lock.unlock();
+        return user;
     }
 
     @Override
     public List<User> getAll() {
-        return users.values().stream().limit(limit).toList();
+        lock.lock();
+        var users = userMap.values().stream().limit(limit).toList();
+        lock.unlock();
+        return users;
     }
 
     @Override
     public int delete(String id) {
-        return 0;
+        lock.lock();
+        var user = userMap.get(id);
+        if (user == null) {
+            return 0;
+        }
+        userMap.remove(id);
+        lock.unlock();
+        return 1;
     }
 }

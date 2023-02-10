@@ -22,12 +22,6 @@ class SupportServiceTest {
     SupportService supportService;
 
     @Test
-    void getStatus() {
-        Status status = supportService.getStatus(ZonedDateTime.now());
-        assertThat(status, is(Status.DISABLED));
-    }
-
-    @Test
     void checkOnLjubljanaTime() {
         assertThat(
                 supportService.getStatus(ZonedDateTime.of(2022, 12, 23, 8, 55, 0, 0, ZoneId.of("Europe/Ljubljana"))),

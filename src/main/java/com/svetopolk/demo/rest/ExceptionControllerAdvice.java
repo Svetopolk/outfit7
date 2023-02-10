@@ -1,5 +1,7 @@
 package com.svetopolk.demo.rest;
 
+import com.svetopolk.demo.exception.LogicException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 class ExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -31,4 +34,12 @@ class ExceptionControllerAdvice {
     public Map<String, String> handleHttpMessageNotReadableExceptions(HttpMessageNotReadableException ex) {
         return Map.of("body", "expect JSON");
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(LogicException.class)
+    public Map<String, String> handleHttpMessageNotReadableExceptions(LogicException ex) {
+        log.error(ex.getLocalizedMessage());
+        return Map.of("unexpected", "we are really sorry");
+    }
+
 }
