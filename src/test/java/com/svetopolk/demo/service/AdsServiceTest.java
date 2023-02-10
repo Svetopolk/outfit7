@@ -49,7 +49,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.ENABLED));
+        assertThat(adsService.getStatus("US"), is(Status.ENABLED));
     }
 
     @Test
@@ -60,7 +60,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.DISABLED));
+        assertThat(adsService.getStatus("US"), is(Status.DISABLED));
     }
 
     @Test
@@ -71,7 +71,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
     @Test
@@ -79,7 +79,7 @@ class AdsServiceTest {
     void connectionTimeout() throws IOException {
         mockWebServer.shutdown();
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
     @Test()
@@ -92,7 +92,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
     @Test
@@ -104,7 +104,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
     @Test
@@ -116,7 +116,7 @@ class AdsServiceTest {
                         """);
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
     @Test
@@ -125,7 +125,7 @@ class AdsServiceTest {
                 .setBody("it is not json");
         mockWebServer.enqueue(mockedResponse);
 
-        assertThat(adsService.execute("US"), is(Status.UNDEFINED));
+        assertThat(adsService.getStatus("US"), is(Status.UNDEFINED));
     }
 
 }

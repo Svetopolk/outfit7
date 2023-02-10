@@ -3,12 +3,10 @@ package com.svetopolk.demo.service;
 import com.svetopolk.demo.domain.User;
 import com.svetopolk.demo.dto.StateResponse;
 import com.svetopolk.demo.dto.Status;
-import org.junit.Before;
+import com.svetopolk.demo.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,7 +45,7 @@ class StateServiceTest {
 
     @Test
     void getStateLowSkill() {
-        when(adsService.execute(countryCode)).thenReturn(Status.DISABLED);
+        when(adsService.getStatus(countryCode)).thenReturn(Status.DISABLED);
         when(supportService.getStatus()).thenReturn(Status.DISABLED);
         when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 4));
 
@@ -58,13 +56,25 @@ class StateServiceTest {
 
     @Test
     void getStateHighSkill() {
-        when(adsService.execute(countryCode)).thenReturn(Status.ENABLED);
+        when(adsService.getStatus(countryCode)).thenReturn(Status.ENABLED);
         when(supportService.getStatus()).thenReturn(Status.ENABLED);
         when(userService.increaseSkill(userId)).thenReturn(new User(userId, "Tom", 5));
 
         var userState = stateService.getState(userId, timeZone, countryCode);
 
         assertThat(userState, is(new StateResponse(Status.ENABLED, Status.ENABLED, Status.ENABLED)));
+    }
+
+
+    @Test
+    void getStateUserNotFound() {
+        when(adsService.getStatus(countryCode)).thenReturn(Status.DISABLED);
+        when(supportService.getStatus()).thenReturn(Status.DISABLED);
+        when(userService.increaseSkill(userId)).thenThrow(new UserNotFoundException("user not found=123"));
+
+        var userState = stateService.getState(userId, timeZone, countryCode);
+
+        assertThat(userState, is(new StateResponse(Status.DISABLED, Status.DISABLED, Status.DISABLED)));
     }
 
 }

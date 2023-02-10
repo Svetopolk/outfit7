@@ -18,7 +18,7 @@ public class AdsService {
     private final WebClient webClient;
     private final ObjectMapper mapper;
 
-    public Status execute(String countryCode) {
+    public Status getStatus(String countryCode) {
 
         AdsResponse res = webClient.get()
                 .uri(builder -> builder.queryParam("countryCode", countryCode).build())

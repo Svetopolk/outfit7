@@ -1,6 +1,7 @@
 package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.domain.User;
+import com.svetopolk.demo.exception.UserNotFoundException;
 import com.svetopolk.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,12 +40,15 @@ public class UserService {
         return userRepository.getAll().stream().limit(getUsersLimit).toList();
     }
 
-    public int  deleteUser(String userId) {
+    public int deleteUser(String userId) {
         return userRepository.delete(userId);
     }
 
     public User increaseSkill(String userId) {
         User user = getUser(userId);
+        if (user == null) {
+            throw new UserNotFoundException("user not found=" + userId);
+        }
         user.setSkill(user.getSkill() + 1);
         return userRepository.save(user);
     }

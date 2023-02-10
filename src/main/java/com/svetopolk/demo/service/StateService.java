@@ -1,9 +1,10 @@
 package com.svetopolk.demo.service;
 
+import com.svetopolk.demo.domain.User;
 import com.svetopolk.demo.dto.Status;
 import com.svetopolk.demo.dto.StateResponse;
+import com.svetopolk.demo.exception.UserNotFoundException;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,10 +35,17 @@ public class StateService {
     public StateResponse getState(@NonNull String userId, @NonNull TimeZone timezone, @NonNull String countryCode) {
         log.info("getState({}, {}, {})", userId, timezone.getID(), countryCode);
 
-        var user = userService.increaseSkill(userId);
+        User user;
+        try {
+            user = userService.increaseSkill(userId);
+        } catch (UserNotFoundException e) {
+            log.error("user " + userId + " not found, use default user instead");
+            user = User.defaultUser(userId);
+        }
+
         Status multiplayerStatus = Status.of(user.getSkill() >= advancedThreshold);
         Status userSupportStatus = supportService.getStatus();
-        Status adsStatus = adsService.execute(countryCode);
+        Status adsStatus = adsService.getStatus(countryCode);
 
         return new StateResponse(multiplayerStatus, userSupportStatus, adsStatus);
     }
