@@ -10,6 +10,9 @@ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=123 -d postgres
 run application: \
 ./gradlew bootRun
 
+run integrationTest: \
+./gradlew integrationTest
+
 ## Request examples
 
 ### Admin api:
@@ -24,7 +27,9 @@ Possible response: \
 {"multiplayer":"disabled","user-support":"enabled","ads":"undefined"}
 
 ## Comments
-- services api request is POST (not GET) because it is not idempotent. It changes server state and after 5 retries returns another result.
+- services api request is POST (not GET) because it is not idempotent. 
+It changes server state and after 5 retries returns another result. 
+Also GET requests can caсhed during net transfer, it can skew user skill level.  
 - 'undefined' status in response looks useful, it helps to separate the cases of refuse and tech failure
 - if user not found services api returns http code 200 with 'undefined' multiplayer status 
 - if user not found admin api returns http code 404
