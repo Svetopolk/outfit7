@@ -36,7 +36,7 @@ class UserServiceTest {
     void increaseUserSkill() {
         var user = userService.createUser("Jure");
         assertThat(user.getSkill(), is(0));
-        user = userService.increaseSkill(user);
+        user = userService.increaseSkill(user.getId());
         assertThat(user.getSkill(), is(1));
     }
 
@@ -99,7 +99,7 @@ class UserServiceTest {
         assertThat(users, hasSize(1000));
         assertThat(users.stream().filter(x -> x.getName().equals("Maria")).count(), is(1000L));
 
-        users.stream().parallel().forEach(x -> userService.increaseSkill(x));
+        users.stream().parallel().forEach(x -> userService.increaseSkill(x.getId()));
         users = userService.getUsers();
 
         assertThat(users, hasSize(1000));

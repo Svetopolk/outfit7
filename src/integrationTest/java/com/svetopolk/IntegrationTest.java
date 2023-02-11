@@ -2,7 +2,6 @@ package com.svetopolk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.svetopolk.demo.Application;
-import com.svetopolk.demo.domain.Status;
 import com.svetopolk.demo.dto.StateRequest;
 import com.svetopolk.demo.dto.StateResponse;
 import com.svetopolk.demo.service.UserService;
@@ -15,8 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.IntStream;
 

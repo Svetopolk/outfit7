@@ -49,10 +49,6 @@ public class UserService {
         if (user == null) {
             throw new UserNotFoundException("user not found=" + userId);
         }
-        return increaseSkill(user);
-    }
-
-    public User increaseSkill(User user) {
         user.setSkill(user.getSkill() + 1);
         return userRepository.save(user);
     }
