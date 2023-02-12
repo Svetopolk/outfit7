@@ -27,14 +27,14 @@ Possible response: \
 {"multiplayer":"disabled","user-support":"enabled","ads":"undefined"}
 
 ## Comments
-- services api request is POST (not GET) because it is not idempotent. 
-It changes server state and after 5 retries returns another result. 
-Also GET requests can caсhed during net transfer, it can skew user skill level.  
+- services api request is POST (not GET) because it is not idempotent 
+(It changes server state and after 5 retries returns another result). 
+Also GET can be caсhed during net transfer (and it skews user skill level).  
 - 'undefined' status in response looks useful, it helps to separate the cases of refuse and tech failure
 - if user not found services api returns http code 200 with 'undefined' multiplayer status 
 - if user not found admin api returns http code 404
-- 'timezone' field in status request is useless but anyway required and validated
+- 'timezone' field in status request looks useless but anyway required and validated
 - delete method returns http code 200 (deleted) and 204 (nothing to delete) 
-- there is a configurable limit on the number of items returned for the method "get all users" (100 by default) 
+- the method "get all users" has a limit on the number of returned users (default 100) 
 
 

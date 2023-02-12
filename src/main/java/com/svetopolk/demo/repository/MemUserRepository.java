@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * assumed for test purpose
- */
-
 @Repository
 public class MemUserRepository implements UserRepository {
 

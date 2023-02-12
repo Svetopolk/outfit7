@@ -46,18 +46,18 @@ public class IntegrationTest {
     private ObjectMapper mapper;
 
     @Test
-    void test() {
-        var user = userService.createUser("Tom");
-        assertThat(user.getName(), is("Tom"));
+    void createUser() {
+        var user = userService.createUser("Marko");
+        assertThat(user.getName(), is("Marko"));
     }
 
     @Test
     void getUser() throws Exception {
-        var user = userService.createUser("Tom");
+        var user = userService.createUser("Marko");
         mockMvc.perform(get("/api/users/" + user.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"" + user.getId() + "\",\"name\":\"Tom\"}"));
+                .andExpect(content().json("{\"id\":\"" + user.getId() + "\",\"name\":\"Marko\"}"));
     }
 
     @Test

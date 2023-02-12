@@ -38,6 +38,42 @@ public class SupportService {
         this.holidays = validateHolidays(holidays);
     }
 
+    public Status getStatus() {
+        return getStatus(ZonedDateTime.now());
+    }
+
+    public Status getStatus(ZonedDateTime time) {
+        if (isWeekend(time) || isHoliday(time)) {
+            return Status.DISABLED;
+        }
+        LocalTime supportLocalTime = time.withZoneSameInstant(timezone.toZoneId()).toLocalTime();
+
+        if (openLocal.compareTo(supportLocalTime) < 0 && closeLocal.compareTo(supportLocalTime) > 0) {
+            return Status.ENABLED;
+        }
+        return Status.DISABLED;
+    }
+
+    private boolean isHoliday(ZonedDateTime time) {
+        return holidays.contains(formatDate(time));
+    }
+
+    public static boolean isWeekend(ZonedDateTime date) {
+        int dayOfWeek = date.getDayOfWeek().getValue();
+        return dayOfWeek == 6 || dayOfWeek == 7;
+    }
+
+    public static String formatDate(ZonedDateTime date) {
+        return date.format(DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH));
+    }
+
+    public static String validateTimeZone(String timezone) {
+        if (!TimeZoneValidator.isValid(timezone)) {
+            throw new IllegalArgumentException("invalid or unknown time zone");
+        }
+        return timezone;
+    }
+
     @NonNull
     private static String validateTime(String time) {
         if (!time.contains(":")) {
@@ -67,42 +103,4 @@ public class SupportService {
         );
         return holidays;
     }
-
-    public Status getStatus() {
-        return getStatus(ZonedDateTime.now());
-    }
-
-    public Status getStatus(ZonedDateTime time) {
-        if (isWeekend(time) || isHoliday(time)) {
-            return Status.DISABLED;
-        }
-
-        LocalTime supportLocalTime = time.withZoneSameInstant(timezone.toZoneId()).toLocalTime();
-
-        if (openLocal.compareTo(supportLocalTime) < 0 && closeLocal.compareTo(supportLocalTime) > 0) {
-            return Status.ENABLED;
-        }
-        return Status.DISABLED;
-    }
-
-    public static boolean isWeekend(ZonedDateTime date) {
-        int dayOfWeek = date.getDayOfWeek().getValue();
-        return dayOfWeek == 6 || dayOfWeek == 7;
-    }
-
-    private boolean isHoliday(ZonedDateTime time) {
-        return holidays.contains(formatDate(time));
-    }
-
-    public static String formatDate(ZonedDateTime date) {
-        return date.format(DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH));
-    }
-
-    public String validateTimeZone(String timezone) {
-        if (!TimeZoneValidator.isValid(timezone)) {
-            throw new IllegalArgumentException("invalid or unknown time zone");
-        }
-        return timezone;
-    }
-
 }
